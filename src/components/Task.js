@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, ViewBase } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome/'
 import commonStyles from '../commonStyles'
 import moment from 'moment'
@@ -16,16 +16,30 @@ export default props => {
 
     const getRightContent = () => {
         return (
-            <TouchableOpacity style={styles.right}>
+            <TouchableOpacity style={styles.right}
+                onPress={() => props.onDelete && props.onDelete(props.id)}>
                 <Icon name='trash' size={20} color='#FFF' />
             </TouchableOpacity>
         )
     }
 
+    const getLeftContent = () => {
+        return (
+            <View style={styles.left}>
+                <Icon name='trash' size={15} color='#FFF' />
+                <Text style={styles.excludeText}>Excluir</Text>
+            </View>
+        )
+    }
+
     return (
-        <Swipeable renderRightActions={getRightContent}>
+        <Swipeable
+            renderRightActions={getRightContent}
+            renderLeftActions={getLeftContent}
+            onSwipeableLeftOpen={() => props.onDelete && props.onDelete(props.id)}>
+
             <View style={styles.constainer}>
-                <TouchableWithoutFeedback onPress={() => props.toggleTask(props.id)}>
+                <TouchableWithoutFeedback onPress={() => props.onToggleTask(props.id)}>
                     <View style={styles.checkContainer}>
                         {getCheckView(props.doneAt)}
                     </View>
@@ -102,5 +116,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 15,
         marginVertical: 5
+    },
+    left: {
+        flex: 1,
+        backgroundColor: '#B13B44',
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        marginVertical: 5
+    },
+    excludeText: {
+        fontFamily: commonStyles.fontFamily,
+        color: '#FFF',
+        fontSize: 15,
+        margin: 10
     }
 })
