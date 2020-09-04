@@ -1,9 +1,11 @@
 import React from 'react'
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, StyleSheet, TouchableWithoutFeedback, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome/'
 import commonStyles from '../commonStyles'
 import moment from 'moment'
 import 'moment/locale/pt-br'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
+
 
 export default props => {
     const doneOrNoteStyle = props.doneAt != null ?
@@ -12,18 +14,28 @@ export default props => {
     const date = props.doneAt ? props.doneAt : props.estimateAt
     const fomarttedDate = moment(date).local('pt-br').format('ddd, D [de] MMMM')
 
+    const getRightContent = () => {
+        return (
+            <TouchableOpacity style={styles.right}>
+                <Icon name='trash' size={20} color='#FFF' />
+            </TouchableOpacity>
+        )
+    }
+
     return (
-        <View style={styles.constainer}>
-            <TouchableWithoutFeedback onPress={() => props.toggleTask(props.id)}>
-                <View style={styles.checkContainer}>
-                    {getCheckView(props.doneAt)}
+        <Swipeable renderRightActions={getRightContent}>
+            <View style={styles.constainer}>
+                <TouchableWithoutFeedback onPress={() => props.toggleTask(props.id)}>
+                    <View style={styles.checkContainer}>
+                        {getCheckView(props.doneAt)}
+                    </View>
+                </TouchableWithoutFeedback>
+                <View>
+                    <Text style={[styles.desc, doneOrNoteStyle]}>{props.desc}</Text>
+                    <Text style={styles.estimateAt}>{fomarttedDate}</Text>
                 </View>
-            </TouchableWithoutFeedback>
-            <View>
-                <Text style={[styles.desc, doneOrNoteStyle]}>{props.desc}</Text>
-                <Text style={styles.estimateAt}>{fomarttedDate}</Text>
             </View>
-        </View>
+        </Swipeable>
     )
 }
 
@@ -81,5 +93,14 @@ const styles = StyleSheet.create({
         color: '#bdbdbd',
         fontFamily: commonStyles.fontFamily,
         fontSize: 12
+    },
+    right: {
+        backgroundColor: '#B13B44',
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        marginVertical: 5
     }
 })

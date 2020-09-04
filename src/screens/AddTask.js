@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
-import { View, Modal, StyleSheet, TouchableWithoutFeedback, Text, TouchableOpacity, Platform } from 'react-native'
+import {
+    View, Modal, StyleSheet, TouchableWithoutFeedback,
+    Text, TouchableOpacity, Platform
+} from 'react-native'
+
 import commonStyles from '../commonStyles'
 import { TextInput } from 'react-native-gesture-handler'
 
