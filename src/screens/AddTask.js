@@ -13,6 +13,16 @@ export default class AddTask extends Component {
         ...initialState
     }
 
+    save = () => {
+        const newTask = {
+            desc: this.state.desc,
+            date: this.state.date
+        }
+
+        this.props.onSave && this.props.onSave(newTask)
+        this.setState({ ...initialState })
+    }
+
     getDatePicker = () => {
         let datePicker = <DateTimePicker value={this.state.date}
             onChange={(_, date) => date ? this.setState({ date, showDatePicker: false }) : this.setState({ showDatePicker: false })}
@@ -39,7 +49,7 @@ export default class AddTask extends Component {
     render() {
         return (
             <Modal transparent visible={this.props.isVisible}
-                onRequestClose={this.props.onCancel} animationType='slide'>
+                onRequestClose={this.props.onCancel} animationType='none'>
 
                 <TouchableWithoutFeedback onPress={this.props.onCancel}>
                     <View style={styles.background}></View>
@@ -54,7 +64,7 @@ export default class AddTask extends Component {
                         <TouchableOpacity onPress={this.props.onCancel}>
                             <Text style={styles.buttonCancel}>CANCELAR</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={this.save}>
                             <Text style={styles.buttonSave}>SALVAR</Text>
                         </TouchableOpacity>
                     </View>

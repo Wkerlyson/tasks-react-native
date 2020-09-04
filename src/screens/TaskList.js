@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { SafeAreaView } from 'react-navigation'
 import {
     Text, ImageBackground, StyleSheet, View,
-    StatusBar, TouchableOpacity, Platform
+    StatusBar, TouchableOpacity, Platform, Alert
 } from 'react-native'
 
 import todayImage from '../../assets/imgs/today.jpg'
@@ -68,6 +68,23 @@ export default class TaskList extends Component {
         this.setState({ visibleTasks })
     }
 
+    addTask = newTask => {
+        if (!newTask.desc || !newTask.desc.trim()) {
+            Alert.alert('Dados inválidos', 'Descriação não informada')
+            return
+        }
+
+        const tasks = [...this.state.tasks]
+        tasks.push({
+            id: Math.random(),
+            desc: newTask.desc,
+            estimateAt: newTask.date,
+            doneAt: null
+        })
+
+        this.setState({ tasks, showAddTask: false }, this.filterTasks)
+    }
+
 
     render() {
 
@@ -79,7 +96,8 @@ export default class TaskList extends Component {
                 <StatusBar translucent backgroundColor="rgba(0,0,0,0.2)" />
 
                 <AddTask isVisible={this.state.showAddTask}
-                    onCancel={() => this.setState({ showAddTask: false })} />
+                    onCancel={() => this.setState({ showAddTask: false })}
+                    onSave={this.addTask} />
 
                 <ImageBackground source={todayImage} style={styles.background}>
                     <View style={styles.iconBar}>
